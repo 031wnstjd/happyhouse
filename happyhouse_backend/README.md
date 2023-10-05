@@ -1,4 +1,4 @@
-# Happyhouse_frontend
+# Happyhouse_backend
 
 17반 2조 권순석 추준성
 
