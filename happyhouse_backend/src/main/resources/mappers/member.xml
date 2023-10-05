@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.hh.mapper.MemberMapper">
+
+	<insert id="signUp" parameterType="MemberDto">
+		insert into member (userid, username, userpwd, email, joindate, interest)
+		values (#{userid}, #{username}, #{userpwd}, #{email}, now(), #{interest})
+	</insert>
+
+	<select id="signIn" parameterType="MemberDto" resultType="MemberDto">
+		select username, userid, email, interest
+		from member
+		where userid = #{userid} and userpwd = #{userpwd}
+	</select>
+	
+	<update id="updateMember" parameterType="MemberDto">
+		update member
+		set username = #{username},
+		email = #{email},
+		interest = #{interest}
+		where userid = #{userid}
+	</update>
+
+	<update id="updatePassword" parameterType="MemberDto">
+		update member
+		set userpwd = #{userpwd}
+		where userid = #{userid}
+	</update>
+	
+	<delete id="deleteMember" parameterType="String">
+		delete from member
+		where userid = #{userid}
+	</delete>
+	
+	<select id="findAll" resultType="MemberDto">
+		select userid, userpwd, username, email, date_format(joindate, '%y.%m.%d') joindate, interest
+		from member
+		order by joindate desc;
+	</select>
+	
+	<select id="findById" parameterType="String" resultType="MemberDto">
+		select userid, userpwd, username, email, date_format(joindate, '%y.%m.%d') joindate, interest
+		from member
+		where userid = #{userid}
+	</select>
+	
+	<select id="isDuplicatedId" parameterType="String" resultType="String">
+		select userid
+		from member
+		where userid = #{userid}
+	</select>
+	
+	<select id="findIdByEmail" parameterType="String" resultType="String">
+		select userid
+		from member
+		where email = #{email}
+	</select>
+	
+	<select id="emailCheck" parameterType="String" resultType="int">
+		select count(*)
+		from member
+		where email = #{email}
+	</select>
+	
+	<update id="findPassword" parameterType="MemberDto">
+		update member
+		set userpwd = #{userpwd}
+		where userid = #{userid} and email = #{email}
+	</update>
+	
+	<select id="findPasswordCheck" parameterType="MemberDto" resultType="int">
+		select count(*)
+		from member
+		where userid = #{userid} and email = #{email}
+	</select>
+	
+	<update id="updateUserPassword" parameterType="map">
+		update member
+		set userpwd = #{userpwd}
+		where userid = #{userid}
+	</update>
+</mapper>

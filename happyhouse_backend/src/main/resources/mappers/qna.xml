@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.hh.mapper.QnaMapper">
+
+	<!-- 문의내용 전체 조회 -->
+	<select id="selectAllQna" resultType="QnaDto">
+		select *
+		from qna
+		order by articleno desc
+	</select>
+	
+	<!-- 문의 한개 상세 조회 -->
+	<select id="selectQnaByNo" resultType="QnaDto">
+		select articleno, subject, userid, content, regtime, type, state, answer
+		from qna 
+		where articleno = #{articleno}
+	</select>
+	
+	<!-- 특정 유저 문의내용 조회 -->
+	<select id="selectUserQna" parameterType="String" resultType="QnaDto">
+		select articleno, userid, subject, content, regtime, type, state, answer
+		from qna
+		where userid = #{userid}
+		order by articleno desc
+	</select>
+	
+	<!-- 문의 등록 -->
+	<insert id="insertQna" parameterType="QnaDto">
+		insert into qna(
+			subject, userid, content, type
+		) values (
+			#{subject}, #{userid}, #{content}, #{type}
+		)
+	</insert>
+	
+	<!-- 문의내용 수정 -->
+	<update id="updateQna" parameterType="QnaDto">
+		update qna 
+		   set subject = #{subject}, 
+		   	   userid = #{userid}, 
+		   	   content = #{content},
+		   	   type = #{type}
+		 where articleno = #{articleno}
+	</update>
+
+	<!-- 문의 삭제 -->
+	<delete id="deleteQna" parameterType="int">
+		delete 
+		from qna 
+		where articleno = #{articleno}
+	</delete>
+	
+	<!-- 문의 답변 등록 및 수정 -->
+	<update id="updateAnswer" parameterType="QnaDto">
+		update qna
+		set answer = #{answer}, state = #{state}
+		where articleno = #{articleno}
+	</update>
+	
+	<select id="getAnswer" parameterType="int" resultType="QnaDto">
+		select articleno, subject, userid, content, regtime, type, state, answer
+		from qna 
+		where articleno = #{articleno}
+	</select>
+	
+</mapper>
+
